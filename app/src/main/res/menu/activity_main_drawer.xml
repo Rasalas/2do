@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:id="@+id/group_item1"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_inbox"
+            android:icon="@drawable/ic_inbox_black_24dp"
+            android:title="Eingang" />
+        <item
+            android:id="@+id/nav_today"
+            android:icon="@drawable/ic_event_black_24dp"
+            android:title="Heute" />
+        <item
+            android:id="@+id/nav_next7days"
+            android:icon="@drawable/ic_date_range_black_24dp"
+            android:title="Nächste 7 Tage" />
+        <item
+            android:id="@+id/nav_label"
+            android:icon="@drawable/ic_label_outline_black_24dp"
+            android:title="Label" />
+        <item
+            android:id="@+id/nav_filter"
+            android:icon="@drawable/ic_filter_list"
+            android:title="Filter" />
+    </group>
+
+    <group
+        android:id="@+id/group_item2"
+        android:checkableBehavior="single">
+
+            <item
+                android:id="@+id/nav_settings"
+                android:icon="@drawable/ic_settings_black_24dp"
+                android:title="Einstellungen" />
+            <item
+                android:id="@+id/nav_feedback"
+                android:icon="@drawable/ic_announcement_black_24dp"
+                android:title="Feedback" />
+
+    </group>
+
+</menu>

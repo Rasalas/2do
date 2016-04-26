@@ -36,24 +36,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:paddingLeft="32dp"
+                android:paddingLeft="64dp"
                 android:paddingRight="16dp"
                 android:gravity="center_vertical"
                 >
 
                 <android.support.design.widget.TextInputLayout
+                    app:hintTextAppearance="@style/TextHint"
                     android:id="@+id/lNameLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/fNameLayout"
                     android:layout_marginTop="10dp">
 
                     <EditText
-                        android:id="@+id/ltitle"
+                        android:id="@+id/etTask"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textSize="24sp"
                         android:ems="10"
-                        android:hint="Title"/>
+                        android:hint="@string/task"/>
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
         </android.support.design.widget.CollapsingToolbarLayout>

@@ -7,23 +7,23 @@
         <item
             android:id="@+id/nav_inbox"
             android:icon="@drawable/ic_inbox_black_24dp"
-            android:title="Eingang" />
+            android:title="@string/inbox" />
         <item
             android:id="@+id/nav_today"
             android:icon="@drawable/ic_event_black_24dp"
-            android:title="Heute" />
+            android:title="@string/today" />
         <item
             android:id="@+id/nav_next7days"
             android:icon="@drawable/ic_date_range_black_24dp"
-            android:title="Nächste 7 Tage" />
+            android:title="@string/next7days" />
         <item
             android:id="@+id/nav_label"
             android:icon="@drawable/ic_label_outline_black_24dp"
-            android:title="Label" />
+            android:title="@string/label" />
         <item
             android:id="@+id/nav_filter"
             android:icon="@drawable/ic_filter_list"
-            android:title="Filter" />
+            android:title="@string/filter" />
     </group>
 
     <group
@@ -33,11 +33,11 @@
             <item
                 android:id="@+id/nav_settings"
                 android:icon="@drawable/ic_settings_black_24dp"
-                android:title="Einstellungen" />
+                android:title="@string/settings" />
             <item
                 android:id="@+id/nav_feedback"
                 android:icon="@drawable/ic_announcement_black_24dp"
-                android:title="Feedback" />
+                android:title="@string/feedback" />
 
     </group>
 

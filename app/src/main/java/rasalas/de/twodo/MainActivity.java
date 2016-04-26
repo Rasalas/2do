@@ -112,19 +112,19 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_inbox) {
-            this.setTitle("Eingang");
+            this.setTitle(R.string.inbox);
 
         } else if (id == R.id.nav_today) {
-            this.setTitle("Heute");
+            this.setTitle(R.string.today);
 
         } else if (id == R.id.nav_next7days) {
-            this.setTitle("Nächste 7 Tage");
+            this.setTitle(R.string.next7days);
 
         } else if (id == R.id.nav_label) {
-            this.setTitle("Label");
+            this.setTitle(R.string.label);
 
         } else if (id == R.id.nav_filter) {
-            this.setTitle("Filter");
+            this.setTitle(R.string.filter);
 
         } else if (id == R.id.nav_settings) {
             startActivity(new Intent(this, SettingsActivity.class));

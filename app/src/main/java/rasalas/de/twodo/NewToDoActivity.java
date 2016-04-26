@@ -26,4 +26,6 @@ public class NewToDoActivity extends AppCompatActivity {
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
+    
+    
 }

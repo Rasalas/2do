@@ -38,8 +38,7 @@
                 android:orientation="vertical"
                 android:paddingLeft="64dp"
                 android:paddingRight="16dp"
-                android:gravity="center_vertical"
-                >
+                android:gravity="center_vertical">
 
                 <android.support.design.widget.TextInputLayout
                     app:hintTextAppearance="@style/TextHint"

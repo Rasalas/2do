@@ -34,27 +34,38 @@
             </android.support.v7.widget.Toolbar>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:orientation="vertical"
                 android:paddingLeft="64dp"
-                android:paddingRight="16dp"
-                android:gravity="center_vertical">
+                android:paddingRight="16dp">
 
-                <android.support.design.widget.TextInputLayout
+
+                <!-- <android.support.design.widget.TextInputLayout
                     app:hintTextAppearance="@style/TextHint"
                     android:id="@+id/lNameLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="10dp">  -->
 
-                    <EditText
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/task"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="16sp" />
+
+                <EditText
                         android:id="@+id/etTask"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="24sp"
                         android:ems="10"
-                        android:hint="@string/task"/>
-                </android.support.design.widget.TextInputLayout>
+                    android:hint="@string/taskHint"
+                    android:shadowColor="@color/colorAccent"
+                    android:textSize="24sp" />
+
+                <!-- </android.support.design.widget.TextInputLayout> -->
             </LinearLayout>
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>

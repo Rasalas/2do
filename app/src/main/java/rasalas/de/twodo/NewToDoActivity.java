@@ -4,10 +4,18 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import java.util.ArrayList;
+
+import rasalas.de.twodo.adapter.NewTaskAdapter;
+import rasalas.de.twodo.model.MenuItem;
+
 public class NewToDoActivity extends AppCompatActivity {
+    ArrayList<MenuItem> menuItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +33,22 @@ public class NewToDoActivity extends AppCompatActivity {
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //loadMenuItems();
     }
-    
-    
+
+    private void loadMenuItems() {
+        menuItems = new ArrayList<>();
+        RecyclerView rvMenuItems = (RecyclerView) findViewById(R.id.newTaskRV);
+
+        menuItems = MenuItem.createMenuList();
+
+        NewTaskAdapter adapter = new NewTaskAdapter(menuItems);
+
+        rvMenuItems.setAdapter(adapter);
+
+        rvMenuItems.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+
 }

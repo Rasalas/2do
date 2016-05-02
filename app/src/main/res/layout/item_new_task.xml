@@ -15,7 +15,7 @@
         android:background="@drawable/ic_event_black_24dp" />
 
     <TextView
-        android:id="@+id/item_newTask_task"
+        android:id="@+id/item_newTask_primText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
@@ -25,12 +25,12 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
-        android:id="@+id/item_newTask_description"
+        android:id="@+id/item_newTask_secText"
         android:layout_width="match_parent"
-        android:layout_height="16dp"
-        android:layout_alignLeft="@+id/item_newTask_task"
-        android:layout_alignStart="@+id/item_newTask_task"
-        android:layout_below="@+id/item_newTask_task"
+        android:layout_height="20dp"
+        android:layout_alignLeft="@+id/item_newTask_primText"
+        android:layout_alignStart="@+id/item_newTask_primText"
+        android:layout_below="@+id/item_newTask_primText"
         android:layout_marginBottom="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="4dp"

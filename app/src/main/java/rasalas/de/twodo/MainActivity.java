@@ -1,32 +1,34 @@
 package rasalas.de.twodo;
 
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import rasalas.de.twodo.adapter.TodoAdapter;
 import rasalas.de.twodo.model.Todo;
 import rasalas.de.twodo.model.TodoModel;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, TodoModel.TodoModelEventListener{
 
+    ArrayList<Todo> todos;
     private TodoModel todoModel;
     private TextView textViewTest;
 
@@ -36,7 +38,8 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        this.setTitle("Eingang");
+
+        this.setTitle(R.string.inbox);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -55,7 +58,10 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        testScenario();
+        onNavigationItemSelected(navigationView.getMenu().getItem(0));
+        navigationView.setCheckedItem(R.id.nav_inbox);
+
+        testScenario2();
     }
 
     private void testScenario() {
@@ -73,6 +79,28 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private void testScenario2() {
+        todos = new ArrayList<>();
+        textViewTest = (TextView) findViewById(R.id.textfieldtest);
+        textViewTest.setText(""); //TODO: testTextView entfernen
+        RecyclerView rvTodos = (RecyclerView) findViewById(R.id.mainRV);
+
+        todoModel = new TodoModel();
+        todoModel.setTodoModelEventListener(this);
+
+        Date dueDate, date = new Date();
+        date.setTime(date.getTime() + 10000);
+        dueDate = (Date) date.clone();
+
+        todos.add(new Todo("Essen machen", new Date(), dueDate, "Toast -_-", 1));
+        todos.add(new Todo("Gassi gehen", new Date(), dueDate, "vor 13Uhr, sonst gehts schief!", 1));
+
+        TodoAdapter adapter = new TodoAdapter(todos);
+
+        rvTodos.setAdapter(adapter);
+
+        rvTodos.setLayoutManager(new LinearLayoutManager(this));
+    }
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

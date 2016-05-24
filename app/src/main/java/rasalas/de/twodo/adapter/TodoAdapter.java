@@ -48,6 +48,9 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
         return todos.size();
     }
 
+    public void updateTodos(List<Todo> todos) {
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView tvTask;
         public TextView tvDesciption;

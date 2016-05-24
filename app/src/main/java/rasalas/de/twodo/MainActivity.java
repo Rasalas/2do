@@ -15,10 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
-
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import rasalas.de.twodo.adapter.TodoAdapter;
@@ -26,17 +23,16 @@ import rasalas.de.twodo.model.Todo;
 import rasalas.de.twodo.model.TodoModel;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, TodoModel.TodoModelEventListener{
+        implements NavigationView.OnNavigationItemSelectedListener, TodoModel.TodoModelEventListener {
 
-    ArrayList<Todo> todos;
-    private TodoModel todoModel;
-    private TextView textViewTest;
+    private TodoAdapter adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         this.setTitle(R.string.inbox);
@@ -45,7 +41,8 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, NewToDoActivity.class));
+                Intent intent = new Intent(MainActivity.this, NewToDoActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -61,46 +58,15 @@ public class MainActivity extends AppCompatActivity
         onNavigationItemSelected(navigationView.getMenu().getItem(0));
         navigationView.setCheckedItem(R.id.nav_inbox);
 
-        testScenario2();
-    }
+        TodoModel.init(this);
+        TodoModel.getInstance().setTodoModelEventListener(this);
 
-    private void testScenario() {
-        todoModel = new TodoModel();
-        todoModel.setTodoModelEventListener(this);
-
-        textViewTest = (TextView) findViewById(R.id.textfieldtest);
-
-        Date dueDate, date = new Date();
-        date.setTime(date.getTime()+10000);
-        for (int i = 0; i<10;i++){
-            dueDate = (Date) date.clone();
-            dueDate.setTime(dueDate.getTime()+i*2000);
-            todoModel.addTodo(new Todo("test" + i, new Date(), dueDate, "testtest",1));
-        }
-    }
-
-    private void testScenario2() {
-        todos = new ArrayList<>();
-        textViewTest = (TextView) findViewById(R.id.textfieldtest);
-        textViewTest.setText(""); //TODO: testTextView entfernen
         RecyclerView rvTodos = (RecyclerView) findViewById(R.id.mainRV);
-
-        todoModel = new TodoModel();
-        todoModel.setTodoModelEventListener(this);
-
-        Date dueDate, date = new Date();
-        date.setTime(date.getTime() + 10000);
-        dueDate = (Date) date.clone();
-
-        todos.add(new Todo("Essen machen", new Date(), dueDate, "Toast -_-", 1));
-        todos.add(new Todo("Gassi gehen", new Date(), dueDate, "vor 13Uhr, sonst gehts schief!", 1));
-
-        TodoAdapter adapter = new TodoAdapter(todos);
-
+        adapter = new TodoAdapter(new ArrayList<Todo>());
         rvTodos.setAdapter(adapter);
-
         rvTodos.setLayoutManager(new LinearLayoutManager(this));
     }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -113,19 +79,14 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
         }
@@ -168,6 +129,7 @@ public class MainActivity extends AppCompatActivity
     public void setActionBarTitle(String heading) {
         this.setTitle(heading);
     }
+
     public void sendEmailFeedback() {
 
         Intent intent = new Intent(Intent.ACTION_SENDTO);
@@ -178,15 +140,21 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        adapter.updateTodos(TodoModel.getInstance().getTodos());
+    }
+
     @Override
     public void onModelChanged(final List<Todo> todos) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                StringBuilder sb = new StringBuilder();
-                for (Todo todo: todos)
-                    sb.append("TODO: "+ todo.getTag() + "\n");
-                textViewTest.setText(sb);
+                // TODO in den recycler view packen
+                adapter.updateTodos(todos);
             }
         });
     }

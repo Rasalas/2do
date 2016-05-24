@@ -1,15 +1,22 @@
 package rasalas.de.twodo.model;
 
+import android.content.Context;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import rasalas.de.twodo.database.ToDoDatabase;
+
 
 /**
  * Created by Jann on 22.04.2016.
  */
 public class TodoModel {
+
+    private ToDoDatabase toDoDatabase;
 
     private List<Todo> todos;
     private TodoModelEventListener todoModelEventListener;
@@ -17,13 +24,29 @@ public class TodoModel {
     private Timer expireTimer;
     private TimerTask expireTask;
 
+    private static TodoModel instance;
 
-    public TodoModel() {
-        todos = new ArrayList<Todo>();
-        expireTimer = new Timer();
+
+    public static void init(Context context) {
+        if (instance == null)
+            instance = new TodoModel(context);
     }
 
-    public void addTodo(Todo todo) {
+    public static TodoModel getInstance() {
+        return instance;
+    }
+
+    private TodoModel(Context context) {
+        toDoDatabase = new ToDoDatabase(context);
+
+        todos = new ArrayList<Todo>();
+        expireTimer = new Timer();
+
+        for (Todo todo : toDoDatabase.getAllToDos())
+            insertTodo(todo);
+    }
+
+    private void insertTodo(Todo todo) {
         int i;
 
         synchronized (todos) {
@@ -37,7 +60,11 @@ public class TodoModel {
 
         if (i == 0)
             startNewTimerTask(todo);
+    }
 
+    public void addTodo(Todo todo) {
+        insertTodo(todo);
+        toDoDatabase.insertTodo(todo);
         notifyModelChanged();
     }
 
@@ -56,12 +83,19 @@ public class TodoModel {
             }
         }
 
+        toDoDatabase.deleteTodo(todo);
         notifyModelChanged();
     }
 
     private void startNewTimerTask(final Todo todo) {
         if (expireTask != null)
             expireTask.cancel();
+
+        if (todo.getDueDate().before(new Date())) {
+            notifyTodoExpired(todo);
+            removeTodo(todo);
+            return;
+        }
 
         expireTimer.schedule(expireTask = new TimerTask() {
             @Override
@@ -92,10 +126,12 @@ public class TodoModel {
         this.todoModelEventListener = todoModelEventListener;
     }
 
+    public List<Todo> getTodos() {
+        return todos;
+    }
 
     public interface TodoModelEventListener {
         void onModelChanged(final List<Todo> todos);
         void onTodoExpired(Todo todo);
     }
 }
-

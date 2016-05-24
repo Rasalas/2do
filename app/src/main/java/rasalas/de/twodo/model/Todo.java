@@ -7,6 +7,7 @@ import java.util.Date;
  */
 public class Todo {
 
+    private long id;
     private String tag;
     private Date dueDate, createDate;
     private String description;
@@ -41,5 +42,13 @@ public class Todo {
 
     public int getPriority() {
         return priority;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

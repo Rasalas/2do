@@ -16,10 +16,17 @@ import rasalas.de.twodo.model.Todo;
  * Created by Rasalas on 02.05.2016.
  */
 public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
+
     private List<Todo> todos;
+
 
     public TodoAdapter(List<Todo> todos) {
         this.todos = todos;
+    }
+
+    public void updateTodos(List<Todo> todos) {
+        this.todos = todos;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -46,9 +53,6 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
     @Override
     public int getItemCount() {
         return todos.size();
-    }
-
-    public void updateTodos(List<Todo> todos) {
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -157,10 +158,5 @@ public class MainActivity extends AppCompatActivity
                 adapter.updateTodos(todos);
             }
         });
-    }
-
-    @Override
-    public void onTodoExpired(Todo todo) {
-
     }
 }

@@ -128,4 +128,9 @@
         <item>360</item>
         <item>-1</item>
     </string-array>
+
+    <string-array name="newtask_list_text">
+        <item>Fälligkeitsdatum</item>
+        <item>Beschreibung</item>
+    </string-array>
 </resources>

@@ -40,7 +40,7 @@ public class NewToDoActivity extends AppCompatActivity {
                        //.setAction("Action", null).show(); // TODO was macht snackbar ? :D
 
                 Date dueDate = new Date(), createDate = new Date();
-                dueDate.setTime(dueDate.getTime()+30000);
+                dueDate.setTime(dueDate.getTime()+3000);
 
                 TodoModel.getInstance().addTodo(new Todo(task.getText().toString(), createDate, dueDate, "Zusatzinfo",1)); // TODO textfelder auslesen
             }

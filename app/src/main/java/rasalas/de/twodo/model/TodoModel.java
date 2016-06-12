@@ -3,10 +3,7 @@ package rasalas.de.twodo.model;
 import android.content.Context;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import rasalas.de.twodo.database.ToDoDatabase;
 
@@ -18,11 +15,12 @@ public class TodoModel {
 
     private ToDoDatabase toDoDatabase;
 
+    private NotificationHandler notificationHandler;
+
     private List<Todo> todos;
     private TodoModelEventListener todoModelEventListener;
 
-    private Timer expireTimer;
-    private TimerTask expireTask;
+    private Context context;
 
     private static TodoModel instance;
 
@@ -30,6 +28,8 @@ public class TodoModel {
     public static void init(Context context) {
         if (instance == null)
             instance = new TodoModel(context);
+        else
+            instance.setContext(context);
     }
 
     public static TodoModel getInstance() {
@@ -39,29 +39,21 @@ public class TodoModel {
     private TodoModel(Context context) {
         toDoDatabase = new ToDoDatabase(context);
 
+        notificationHandler = new NotificationHandler(context);
+
         todos = new ArrayList<Todo>();
-        expireTimer = new Timer();
 
         for (Todo todo : toDoDatabase.getAllToDos())
             insertTodo(todo);
     }
 
+    // Called for adding / loading existing Todos
     private void insertTodo(Todo todo) {
-        int i;
-
-        synchronized (todos) {
-            for (i = 0; i < todos.size(); i++) {
-                if (todo.getDueDate().before(todos.get(i).getDueDate()))
-                    break;
-            }
-
-            todos.add(i, todo);
-        }
-
-        if (i == 0)
-            startNewTimerTask(todo);
+        todos.add(todo);
+        notificationHandler.addTodo(todo);
     }
 
+    // Called for adding / saving new Todos
     public void addTodo(Todo todo) {
         insertTodo(todo);
         toDoDatabase.insertTodo(todo);
@@ -69,41 +61,11 @@ public class TodoModel {
     }
 
     public void removeTodo(Todo todo) {
-        synchronized (todos) {
-            int i;
-            for (i = 0; i < todos.size(); i++) {
-                if (todos.get(i) == todo) {
-                    todos.remove(i);
-                    if (i == 0) {
-                        if (!todos.isEmpty())
-                            startNewTimerTask(todos.get(0));
-                    }
-                    break;
-                }
-            }
-        }
+        todos.remove(todo);
+        notificationHandler.removeTodo(todo);
 
         toDoDatabase.deleteTodo(todo);
         notifyModelChanged();
-    }
-
-    private void startNewTimerTask(final Todo todo) {
-        if (expireTask != null)
-            expireTask.cancel();
-
-        if (todo.getDueDate().before(new Date())) {
-            notifyTodoExpired(todo);
-            removeTodo(todo);
-            return;
-        }
-
-        expireTimer.schedule(expireTask = new TimerTask() {
-            @Override
-            public void run() {
-                notifyTodoExpired(todo);
-                removeTodo(todo);
-            }
-        }, todo.getDueDate());
     }
 
     private void notifyModelChanged() {
@@ -113,13 +75,6 @@ public class TodoModel {
         synchronized (todos) {
             todoModelEventListener.onModelChanged(todos);
         }
-    }
-
-    private void notifyTodoExpired(Todo todo) {
-        if (todoModelEventListener == null)
-            return;
-
-        todoModelEventListener.onTodoExpired(todo);
     }
 
     public void setTodoModelEventListener(TodoModelEventListener todoModelEventListener) {
@@ -132,6 +87,10 @@ public class TodoModel {
 
     public interface TodoModelEventListener {
         void onModelChanged(final List<Todo> todos);
-        void onTodoExpired(Todo todo);
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+        notificationHandler.setContext(context);
     }
 }

@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, TodoModel.TodoModelEventListener {
 
     private TodoAdapter adapter;
+    RecyclerView rvTodos;
 
 
     @Override
@@ -62,12 +64,30 @@ public class MainActivity extends AppCompatActivity
         TodoModel.init(this);
         TodoModel.getInstance().setTodoModelEventListener(this);
 
-        RecyclerView rvTodos = (RecyclerView) findViewById(R.id.mainRV);
+        rvTodos = (RecyclerView) findViewById(R.id.mainRV);
         adapter = new TodoAdapter(new ArrayList<Todo>());
         rvTodos.setAdapter(adapter);
         rvTodos.setLayoutManager(new LinearLayoutManager(this));
+        itemTouchHelper.attachToRecyclerView(rvTodos);
     }
+    ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
+        @Override
+        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+            //Remove swiped item from list and notify the RecyclerView
+            int position = viewHolder.getAdapterPosition();
+            TodoModel.getInstance().removeTodoById(position);
+            //adjectives.remove(position);
+            rvTodos.getAdapter().notifyItemRemoved(position);
+        }
+    };
+
+    ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

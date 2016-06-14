@@ -60,6 +60,21 @@ public class TodoModel {
         notifyModelChanged();
     }
 
+    public void removeTodoById(int pos){
+        int s = 0;
+        for (Todo d: todos){
+            s++;
+            if(d.equals(todos.get(pos))){
+
+                //todos.remove(d);
+
+                notificationHandler.removeTodo(d);
+                toDoDatabase.deleteTodo(d);
+                //notifyModelChanged();
+            }
+        }
+        //todos.remove(pos);
+    }
     public void removeTodo(Todo todo) {
         todos.remove(todo);
         notificationHandler.removeTodo(todo);

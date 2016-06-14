@@ -33,6 +33,7 @@ public class NewTaskAdapter extends RecyclerView.Adapter<NewTaskAdapter.ViewHold
         return new ViewHolder(todoView);
     }
 
+
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         MenuItem item = items.get(position);

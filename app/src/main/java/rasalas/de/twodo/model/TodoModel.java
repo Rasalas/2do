@@ -2,9 +2,9 @@ package rasalas.de.twodo.model;
 
 import android.content.Context;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import rasalas.de.twodo.alarm.AlarmHandler;
 import rasalas.de.twodo.database.ToDoDatabase;
 
 
@@ -15,9 +15,8 @@ public class TodoModel {
 
     private ToDoDatabase toDoDatabase;
 
-    private NotificationHandler notificationHandler;
+    private AlarmHandler alarmHandler;
 
-    private List<Todo> todos;
     private TodoModelEventListener todoModelEventListener;
 
     private Context context;
@@ -39,57 +38,47 @@ public class TodoModel {
     private TodoModel(Context context) {
         toDoDatabase = new ToDoDatabase(context);
 
-        notificationHandler = new NotificationHandler(context);
+        alarmHandler = new AlarmHandler(context);
+        alarmHandler.setContext(context);
 
-        todos = new ArrayList<Todo>();
-
-        for (Todo todo : toDoDatabase.getAllToDos())
-            insertTodo(todo);
+        for (Todo todo : toDoDatabase.getAllToDos()) {
+            alarmHandler.addTodo(todo);
+        }
     }
 
-    // Called for adding / loading existing Todos
-    private void insertTodo(Todo todo) {
-        todos.add(todo);
-        notificationHandler.addTodo(todo);
-    }
-
-    // Called for adding / saving new Todos
+    // Called for adding new Todos
     public void addTodo(Todo todo) {
-        insertTodo(todo);
+        alarmHandler.addTodo(todo);
         toDoDatabase.insertTodo(todo);
         notifyModelChanged();
     }
 
-    public void removeTodoById(int pos){
-        int s = 0;
-        for (Todo d: todos){
-            s++;
-            if(d.equals(todos.get(pos))){
-
-                //todos.remove(d);
-
-                notificationHandler.removeTodo(d);
-                toDoDatabase.deleteTodo(d);
-                //notifyModelChanged();
-            }
-        }
-        //todos.remove(pos);
-    }
     public void removeTodo(Todo todo) {
-        todos.remove(todo);
-        notificationHandler.removeTodo(todo);
-
         toDoDatabase.deleteTodo(todo);
+        alarmHandler.removeTodo(todo);
         notifyModelChanged();
+    }
+
+    public void removeTodo(long todoID) {
+        toDoDatabase.deleteTodo(todoID);
+        alarmHandler.removeTodo(todoID);
+        notifyModelChanged();
+    }
+
+    public void removeTodo(int index) {
+        List<Todo> todos = toDoDatabase.getAllToDos();
+        if (index < 0 || index >= todos.size())
+            return;
+
+        Todo todo = todos.get(index);
+        removeTodo(todo);
     }
 
     private void notifyModelChanged() {
         if (todoModelEventListener == null)
             return;
 
-        synchronized (todos) {
-            todoModelEventListener.onModelChanged(todos);
-        }
+        todoModelEventListener.onModelChanged(toDoDatabase.getAllToDos());
     }
 
     public void setTodoModelEventListener(TodoModelEventListener todoModelEventListener) {
@@ -97,7 +86,7 @@ public class TodoModel {
     }
 
     public List<Todo> getTodos() {
-        return todos;
+        return toDoDatabase.getAllToDos();
     }
 
     public interface TodoModelEventListener {
@@ -106,6 +95,14 @@ public class TodoModel {
 
     public void setContext(Context context) {
         this.context = context;
-        notificationHandler.setContext(context);
+        alarmHandler.setContext(context);
+    }
+
+    public AlarmHandler getAlarmHandler() {
+        return alarmHandler;
+    }
+
+    public ToDoDatabase getToDoDatabase() {
+        return toDoDatabase;
     }
 }

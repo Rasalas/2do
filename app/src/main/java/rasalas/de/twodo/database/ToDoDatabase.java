@@ -40,6 +40,10 @@ public class ToDoDatabase {
         database.delete("TODO", "todo_id = " + todo.getId(), null);
     }
 
+    public void deleteTodo(long todoID) {
+        database.delete("TODO", "todo_id = " + todoID, null);
+    }
+
     public List<Todo> getAllToDos() {
         List<Todo> todos = new ArrayList<Todo>();
 

@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity
         public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
             //Remove swiped item from list and notify the RecyclerView
             int position = viewHolder.getAdapterPosition();
-            TodoModel.getInstance().removeTodoById(position);
+            TodoModel.getInstance().removeTodo(position);
             //adjectives.remove(position);
             rvTodos.getAdapter().notifyItemRemoved(position);
         }
@@ -147,6 +147,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+
     public void setActionBarTitle(String heading) {
         this.setTitle(heading);
     }
@@ -179,4 +180,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
     }
+
+
 }

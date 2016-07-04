@@ -51,4 +51,8 @@ public class Todo {
     public void setId(long id) {
         this.id = id;
     }
+
+    public void setDueDate(Date dueDate) {
+        this.dueDate = dueDate;
+    }
 }
